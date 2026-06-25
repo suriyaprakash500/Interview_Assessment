@@ -1,0 +1,16 @@
+query_id,query_type,query,text_retrieval_latency,multimodal_retrieval_latency,end_to_end_text_latency,end_to_end_multimodal_latency
+Q01,text,What was the highest-ever total revenue of TVS Motor Company in FY 2024-25?,0.0,0.0,0.018153905868530273,0.018153905868530273
+Q02,text,What was the PBT (Profit Before Tax) for TVS Motor Company in FY 2024-25?,0.0,0.0,0.017888784408569336,0.017888784408569336
+Q03,text,Who is the Chairman and Chairman Emeritus of TVS Motor Company as of the FY 2024-25 report?,0.0,0.0,0.016705989837646484,0.016705989837646484
+Q04,text,How many countries are TVS Motor Company products sold in according to the report?,0.0,0.0018122196197509766,0.011044979095458984,0.012857198715209961
+Q05,text,What was the R&D investment of TVS Motor Company in FY 2024-25?,0.0,0.0,0.0025305747985839844,0.0025305747985839844
+Q06,text,What is the number of affiliations of TVS Motor Company with trade and industry chambers?,0.0,0.0,0.01809549331665039,0.01809549331665039
+Q07,text,What wholly owned subsidiary was incorporated in Dubai on 27th June 2024?,0.0,0.0,0.015486717224121094,0.015486717224121094
+Q08,text,What program was launched in Hosur as a cornerstone of health and wellness efforts?,0.0,0.0,0.017730712890625,0.017730712890625
+Q09,visual,What is the renewable power contribution to the overall share of power in FY 2024-25?,0.0009999275207519531,0.0,0.014546871185302734,0.013546943664550781
+Q10,visual,What was the contribution of exports to the Company's revenues in Spotlight Story #2?,0.0,0.0,0.0021424293518066406,0.0021424293518066406
+Q11,visual,What was the penetration rate of the two-wheeler EV scooter industry according to the VAHAN snapshot?,0.0,0.0,0.01685786247253418,0.01685786247253418
+Q12,visual,What is the number of users of TVSM vehicles shown in the highlights?,0.0,0.0009992122650146484,0.014365434646606445,0.015364646911621094
+Q13,visual,How many villages were impacted by CSR initiatives as shown in the ESG highlights?,0.0,0.0,0.0002307891845703125,0.0002307891845703125
+Q14,visual,How many Kaizens were implemented in 2024-25 according to the ESG highlights?,0.0,0.0,0.016537189483642578,0.016537189483642578
+Q15,visual,What was the growth rate of the two-wheeler EV scooter industry in FY 2024-25?,0.0,0.0,0.022323131561279297,0.022323131561279297

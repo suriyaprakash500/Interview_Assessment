@@ -1,0 +1,107 @@
+[
+  {
+    "query_id": "Q01",
+    "query_type": "text",
+    "query": "What was the highest-ever total revenue of TVS Motor Company in FY 2024-25?",
+    "expected_page": 4,
+    "expected_document": "55 Annual Report 2024-2025.pdf"
+  },
+  {
+    "query_id": "Q02",
+    "query_type": "text",
+    "query": "What was the PBT (Profit Before Tax) for TVS Motor Company in FY 2024-25?",
+    "expected_page": 47,
+    "expected_document": "55 Annual Report 2024-2025.pdf"
+  },
+  {
+    "query_id": "Q03",
+    "query_type": "text",
+    "query": "Who is the Chairman and Chairman Emeritus of TVS Motor Company as of the FY 2024-25 report?",
+    "expected_page": 16,
+    "expected_document": "55 Annual Report 2024-2025.pdf"
+  },
+  {
+    "query_id": "Q04",
+    "query_type": "text",
+    "query": "How many countries are TVS Motor Company products sold in according to the report?",
+    "expected_page": 21,
+    "expected_document": "55 Annual Report 2024-2025.pdf"
+  },
+  {
+    "query_id": "Q05",
+    "query_type": "text",
+    "query": "What was the R&D investment of TVS Motor Company in FY 2024-25?",
+    "expected_page": 25,
+    "expected_document": "55 Annual Report 2024-2025.pdf"
+  },
+  {
+    "query_id": "Q06",
+    "query_type": "text",
+    "query": "What is the number of affiliations of TVS Motor Company with trade and industry chambers?",
+    "expected_page": 88,
+    "expected_document": "55 Annual Report 2024-2025.pdf"
+  },
+  {
+    "query_id": "Q07",
+    "query_type": "text",
+    "query": "What wholly owned subsidiary was incorporated in Dubai on 27th June 2024?",
+    "expected_page": 61,
+    "expected_document": "55 Annual Report 2024-2025.pdf"
+  },
+  {
+    "query_id": "Q08",
+    "query_type": "text",
+    "query": "What program was launched in Hosur as a cornerstone of health and wellness efforts?",
+    "expected_page": 29,
+    "expected_document": "55 Annual Report 2024-2025.pdf"
+  },
+  {
+    "query_id": "Q09",
+    "query_type": "visual",
+    "query": "What is the renewable power contribution to the overall share of power in FY 2024-25?",
+    "expected_page": 27,
+    "expected_document": "55 Annual Report 2024-2025.pdf"
+  },
+  {
+    "query_id": "Q10",
+    "query_type": "visual",
+    "query": "What was the contribution of exports to the Company's revenues in Spotlight Story #2?",
+    "expected_page": 21,
+    "expected_document": "55 Annual Report 2024-2025.pdf"
+  },
+  {
+    "query_id": "Q11",
+    "query_type": "visual",
+    "query": "What was the penetration rate of the two-wheeler EV scooter industry according to the VAHAN snapshot?",
+    "expected_page": 49,
+    "expected_document": "55 Annual Report 2024-2025.pdf"
+  },
+  {
+    "query_id": "Q12",
+    "query_type": "visual",
+    "query": "What is the number of users of TVSM vehicles shown in the highlights?",
+    "expected_page": 2,
+    "expected_document": "55 Annual Report 2024-2025.pdf"
+  },
+  {
+    "query_id": "Q13",
+    "query_type": "visual",
+    "query": "How many villages were impacted by CSR initiatives as shown in the ESG highlights?",
+    "expected_page": 27,
+    "expected_document": "55 Annual Report 2024-2025.pdf"
+  },
+  {
+    "query_id": "Q14",
+    "query_type": "visual",
+    "query": "How many Kaizens were implemented in 2024-25 according to the ESG highlights?",
+    "expected_page": 27,
+    "expected_document": "55 Annual Report 2024-2025.pdf"
+  },
+  {
+    "query_id": "Q15",
+    "query_type": "visual",
+    "query": "What was the growth rate of the two-wheeler EV scooter industry in FY 2024-25?",
+    "expected_page": 49,
+    "expected_document": "55 Annual Report 2024-2025.pdf"
+  }
+]

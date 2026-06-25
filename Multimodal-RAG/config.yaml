@@ -1,0 +1,27 @@
+# PDF and Ingestion Settings
+pdf_path: "input/55 Annual Report 2024-2025.pdf"
+output_dir: "outputs"
+images_dir: "outputs/images"
+pdf_rendering_dpi: 150
+
+# Ingestion limits for evaluation/development runs (set null or 191 to ingest full PDF)
+# Set start_page and end_page (1-indexed) to restrict ingestion to a subset of pages.
+ingest_range:
+  start_page: 1
+  end_page: 191
+
+# Text Baseline Chunking Options
+chunk_size: 800
+chunk_overlap: 100
+
+# FAISS Vector Indexing Settings
+indexes_dir: "indexes"
+multimodal_index_path: "indexes/multimodal_index.faiss"
+text_baseline_index_path: "indexes/text_baseline_index.faiss"
+
+# Embeddings Configuration
+local_embedding_model: "sentence-transformers/all-MiniLM-L6-v2"
+openai_embedding_model: "text-embedding-3-small"
+
+# Retrieval Settings
+top_k: 5
