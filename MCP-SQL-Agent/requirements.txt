@@ -1,3 +1,4 @@
 mcp>=1.27,<2
 groq
 python-dotenv
+streamlit

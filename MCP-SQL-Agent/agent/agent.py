@@ -56,10 +56,12 @@ def _print_step(label: str, content: str):
 
 
 class MCPAgent:
-    def __init__(self):
+    def __init__(self, step_callback=None):
         self._session = None
         self._read = None
         self._write = None
+        self.steps = []  # Collected steps for UI display
+        self._step_callback = step_callback  # Optional callback for real-time updates
 
     async def connect(self):
         """Connect to the MCP server via stdio."""
@@ -91,19 +93,26 @@ class MCPAgent:
         # MCP returns content blocks; extract text
         return result.content[0].text
 
+    def _log(self, label: str, content: str):
+        """Log a step: print to console and collect for UI."""
+        _print_step(label, content)
+        self.steps.append({"label": label, "content": content})
+        if self._step_callback:
+            self._step_callback(label, content)
+
     async def _discover_schema(self) -> str:
         """Discover database schema via MCP tools. Returns formatted schema string."""
-        _print_step("ACTION", "Calling list_tables()")
+        self._log("ACTION", "Calling list_tables()")
         tables_json = await self._call_tool("list_tables")
         tables = json.loads(tables_json)
-        _print_step("OBSERVATION", f"Tables found: {tables}")
+        self._log("OBSERVATION", f"Tables found: {tables}")
 
         schema_parts = []
         for table in tables:
-            _print_step("ACTION", f"Calling describe_schema('{table}')")
+            self._log("ACTION", f"Calling describe_schema('{table}')")
             schema_json = await self._call_tool("describe_schema", {"table_name": table})
             schema = json.loads(schema_json)
-            _print_step("OBSERVATION", f"Schema for {table}: {json.dumps(schema, indent=2)}")
+            self._log("OBSERVATION", f"Schema for {table}: {json.dumps(schema, indent=2)}")
             schema_parts.append(json.dumps(schema, indent=2))
 
         return "\n\n".join(schema_parts)
@@ -119,6 +128,7 @@ class MCPAgent:
         Returns:
             The final natural-language answer.
         """
+        self.steps = []  # Reset steps for this question
         print(f"\n{'#'*60}")
         print(f"QUESTION: {question}")
         if followup:
@@ -126,7 +136,7 @@ class MCPAgent:
         print(f"{'#'*60}")
 
         # Step 1-2: Discover schema
-        _print_step("PLAN", "Step 1: Discover database schema via MCP tools\n"
+        self._log("PLAN", "Step 1: Discover database schema via MCP tools\n"
                            "Step 2: Generate SQL from the question\n"
                            "Step 3: Execute SQL and summarize results")
 
@@ -145,12 +155,12 @@ class MCPAgent:
         # If initial_sql is provided, skip LLM and try it directly (for error recovery demo)
         if initial_sql:
             sql = initial_sql
-            _print_step("ACTION", f"Using provided SQL: {sql}")
+            self._log("ACTION", f"Using provided SQL: {sql}")
         else:
             # Step 3: Ask LLM to generate SQL (or clarify)
-            _print_step("ACTION", "Sending question and schema to LLM")
+            self._log("ACTION", "Sending question and schema to LLM")
             llm_response = chat(messages)
-            _print_step("OBSERVATION", f"LLM response: {llm_response}")
+            self._log("OBSERVATION", f"LLM response: {llm_response}")
 
             try:
                 action = json.loads(llm_response)
@@ -165,17 +175,17 @@ class MCPAgent:
 
             # Handle clarification
             if action.get("action") == "clarify":
-                _print_step("ANSWER", f"Clarification needed: {action['message']}")
+                self._log("ANSWER", f"Clarification needed: {action['message']}")
                 return f"CLARIFICATION: {action['message']}"
 
             sql = action.get("sql", "")
 
         # Step 4-5: Execute SQL with retry logic
         for attempt in range(1, MAX_RETRIES + 2):  # attempts 1, 2, 3
-            _print_step("ACTION", f"Attempt {attempt}: Calling run_query('{sql}')")
+            self._log("ACTION", f"Attempt {attempt}: Calling run_query('{sql}')")
             result_json = await self._call_tool("run_query", {"sql": sql})
             result = json.loads(result_json)
-            _print_step("OBSERVATION", f"Query result: {json.dumps(result, indent=2)}")
+            self._log("OBSERVATION", f"Query result: {json.dumps(result, indent=2)}")
 
             if "error" not in result:
                 break  # success
@@ -184,7 +194,7 @@ class MCPAgent:
                 return f"Query failed after {MAX_RETRIES + 1} attempts. Last error: {result['error']}"
 
             # Error recovery: re-discover schema and ask LLM to fix
-            _print_step("PLAN", f"Query failed: {result['error']}\n"
+            self._log("PLAN", f"Query failed: {result['error']}\n"
                                f"Re-inspecting schema and retrying (attempt {attempt + 1})...")
             schema_text = await self._discover_schema()
             retry_msg = RETRY_PROMPT.format(error=result["error"], schema=schema_text)
@@ -192,7 +202,7 @@ class MCPAgent:
             messages.append({"role": "user", "content": retry_msg})
 
             llm_response = chat(messages)
-            _print_step("OBSERVATION", f"LLM retry response: {llm_response}")
+            self._log("OBSERVATION", f"LLM retry response: {llm_response}")
 
             try:
                 action = json.loads(llm_response)
@@ -212,5 +222,5 @@ class MCPAgent:
             {"role": "user", "content": f"Question: {question}\nSQL: {sql}\nResults: {json.dumps(result)}"},
         ]
         answer = chat(summary_messages)
-        _print_step("ANSWER", answer)
+        self._log("ANSWER", answer)
         return answer

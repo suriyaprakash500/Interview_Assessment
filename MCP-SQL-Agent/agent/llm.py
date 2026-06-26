@@ -6,7 +6,18 @@ from groq import Groq
 
 load_dotenv()
 
-_client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+# Support both .env (local) and st.secrets (Streamlit Cloud)
+def _get_api_key():
+    key = os.environ.get("GROQ_API_KEY")
+    if not key:
+        try:
+            import streamlit as st
+            key = st.secrets.get("GROQ_API_KEY")
+        except Exception:
+            pass
+    return key
+
+_client = Groq(api_key=_get_api_key())
 MODEL = "llama-3.1-8b-instant"
 
 
