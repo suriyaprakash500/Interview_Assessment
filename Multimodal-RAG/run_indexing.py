@@ -1,4 +1,7 @@
 import os
+# Change working directory to this script's directory to resolve relative paths in deployments
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 import yaml
 import json
 import logging
