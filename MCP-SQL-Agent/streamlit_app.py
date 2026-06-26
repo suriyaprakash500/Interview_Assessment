@@ -98,6 +98,36 @@ async def run_agent(question: str, followup: str = None) -> tuple[str, list]:
         await agent.close()
 
 
+# --- Helper to display steps ---
+def display_steps(steps):
+    """Render agent reasoning steps."""
+    st.divider()
+    with st.expander("View agent reasoning steps", expanded=False):
+        for step in steps:
+            label = step["label"]
+            content = step["content"]
+            icon = _label_icon(label)
+            css_class = _label_color(label)
+
+            st.markdown(f'<div class="{css_class}"><strong>{icon} [{label}]</strong></div>',
+                        unsafe_allow_html=True)
+
+            if label == "OBSERVATION" and len(content) > 200:
+                with st.expander(f"View full {label.lower()}", expanded=False):
+                    st.code(content, language="json")
+            else:
+                st.code(content)
+
+
+# --- Initialize session state ---
+if "clarification_pending" not in st.session_state:
+    st.session_state.clarification_pending = False
+    st.session_state.clarification_question = ""
+    st.session_state.clarification_message = ""
+    st.session_state.last_answer = ""
+    st.session_state.last_steps = []
+
+
 # --- Main input ---
 default_q = st.session_state.get("input_question", "")
 question = st.text_input(
@@ -111,7 +141,11 @@ question = st.text_input(
 if "input_question" in st.session_state:
     del st.session_state["input_question"]
 
+# --- Ask Agent button ---
 if st.button("Ask Agent", type="primary", disabled=not question):
+    # Reset any previous clarification state
+    st.session_state.clarification_pending = False
+
     with st.spinner("Agent is thinking..."):
         try:
             answer, steps = asyncio.run(run_agent(question))
@@ -119,36 +153,44 @@ if st.button("Ask Agent", type="primary", disabled=not question):
             st.error(f"Error: {e}")
             st.stop()
 
-    # --- Display answer ---
     if answer.startswith("CLARIFICATION:"):
-        clarification_msg = answer.replace("CLARIFICATION:", "").strip()
-        st.warning(f"🤔 **The agent needs clarification:** {clarification_msg}")
-
-        followup = st.text_input("Your response:", key="followup_input")
-        if st.button("Send follow-up", key="followup_btn"):
-            with st.spinner("Agent is processing follow-up..."):
-                answer, steps = asyncio.run(run_agent(question, followup=followup))
-            st.markdown(f'<div class="main-answer"><strong>Answer:</strong> {answer}</div>',
-                        unsafe_allow_html=True)
+        # Store clarification state so it persists across reruns
+        st.session_state.clarification_pending = True
+        st.session_state.clarification_question = question
+        st.session_state.clarification_message = answer.replace("CLARIFICATION:", "").strip()
+        st.session_state.last_steps = steps
+        st.session_state.last_answer = ""
     else:
-        st.markdown(f'<div class="main-answer"><strong>Answer:</strong> {answer}</div>',
-                    unsafe_allow_html=True)
+        st.session_state.last_answer = answer
+        st.session_state.last_steps = steps
+        st.session_state.clarification_pending = False
 
-    # --- Display steps ---
-    st.divider()
-    with st.expander("🔍 View agent reasoning steps", expanded=False):
-        for step in steps:
-            label = step["label"]
-            content = step["content"]
-            icon = _label_icon(label)
-            css_class = _label_color(label)
+# --- Display clarification flow ---
+if st.session_state.clarification_pending:
+    st.warning(f"The agent needs clarification: {st.session_state.clarification_message}")
+    followup = st.text_input("Your response:", key="followup_input")
 
-            st.markdown(f'<div class="{css_class}"><strong>{icon} [{label}]</strong></div>',
-                        unsafe_allow_html=True)
+    if st.button("Send follow-up", key="followup_btn"):
+        with st.spinner("Agent is processing follow-up..."):
+            try:
+                answer, steps = asyncio.run(
+                    run_agent(st.session_state.clarification_question, followup=followup)
+                )
+            except Exception as e:
+                st.error(f"Error: {e}")
+                st.stop()
 
-            if label == "OBSERVATION" and len(content) > 200:
-                # Collapse long observations (schema dumps, query results)
-                with st.expander(f"View full {label.lower()}", expanded=False):
-                    st.code(content, language="json")
-            else:
-                st.code(content)
+        st.session_state.last_answer = answer
+        st.session_state.last_steps = steps
+        st.session_state.clarification_pending = False
+        st.rerun()
+
+# --- Display results ---
+if st.session_state.last_answer:
+    st.markdown(
+        f'<div class="main-answer"><strong>Answer:</strong> {st.session_state.last_answer}</div>',
+        unsafe_allow_html=True,
+    )
+
+if st.session_state.last_steps:
+    display_steps(st.session_state.last_steps)
