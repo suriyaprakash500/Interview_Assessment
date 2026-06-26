@@ -8,20 +8,20 @@ This report presents the quantitative and qualitative comparison of a **Multimod
 
 | Metric | Text RAG Baseline | Multimodal RAG | Delta |
 | ------ | ----------------- | -------------- | ----- |
-| **Precision@5** | 0.1067 | 0.0933 | -0.0133 |
-| **Recall@5** | 53.33% | 46.67% | -6.67% |
-| **MRR** | 0.3467 | 0.2189 | -0.1278 |
-| **Mean Index Retrieval Latency** | 0.000067s | 0.000187s | +0.000121s |
-| **Mean End-to-End Latency** | 0.013643s | 0.013763s | +0.000121s |
+| **Precision@5** | 0.0933 | 0.0800 | -0.0133 |
+| **Recall@5** | 46.67% | 40.00% | -6.67% |
+| **MRR** | 0.3333 | 0.1967 | -0.1367 |
+| **Mean Index Retrieval Latency** | 0.000400s | 0.000534s | +0.000134s |
+| **Mean End-to-End Latency** | 0.032133s | 0.032267s | +0.000134s |
 
 ### Text-Focused Queries (N = 8)
 
 | Metric | Text RAG | Multimodal | Delta |
 | ------ | -------- | ---------- | ----- |
-| **Precision@5** | 0.0750 | 0.0500 | -0.0250 |
-| **Recall@5** | 37.50% | 25.00% | -12.50% |
-| **MRR** | 0.2125 | 0.1042 | -0.1083 |
-| **Mean End-to-End Latency** | 0.014705s | 0.014931s | +0.000227s |
+| **Precision@5** | 0.0500 | 0.0250 | -0.0250 |
+| **Recall@5** | 25.00% | 12.50% | -12.50% |
+| **MRR** | 0.1875 | 0.0625 | -0.1250 |
+| **Mean End-to-End Latency** | 0.030707s | 0.030457s | -0.000249s |
 
 ### Visual-Focused Queries (N = 7)
 
@@ -30,7 +30,7 @@ This report presents the quantitative and qualitative comparison of a **Multimod
 | **Precision@5** | 0.1429 | 0.1429 | +0.0000 |
 | **Recall@5** | 71.43% | 71.43% | +0.00% |
 | **MRR** | 0.5000 | 0.3500 | -0.1500 |
-| **Mean End-to-End Latency** | 0.012429s | 0.012429s | -0.000000s |
+| **Mean End-to-End Latency** | 0.033763s | 0.034335s | +0.000572s |
 
 ## 2. Qualitative Analysis & Evaluation Discussion
 
